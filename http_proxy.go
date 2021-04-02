@@ -21,7 +21,7 @@ var (
 	keyfile   = flag.String("key", "", "Private key file name")
 	certfile  = flag.String("cert", "", "Certificate file name")
 	https     = flag.Bool("https", false, "Use TLS for client to proxy communication")
-	addr      = flag.String("addr", ":8080", "Address to listen")
+	addr      = flag.String("addr", ":3128", "Address to listen")
 	maxConns  = flag.Uint64("maxconns", 0, "Max number of simultaneous connections allowed connections")
 	idleClose = flag.Uint64("idleclose", 30, "Time in seconds that an idle connection will be allowed before closing it")
 )

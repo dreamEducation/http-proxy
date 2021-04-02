@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -74,6 +75,7 @@ func New(opts *Opts) *Server {
 		OKWaitsForUpstream:  !opts.OKDoesNotWaitForUpstream,
 		OKSendsServerTiming: true,
 		OnError: func(ctx filters.Context, req *http.Request, read bool, err error) *http.Response {
+			fmt.Printf("proxy: %s\n",err.Error())
 			status := http.StatusBadGateway
 			if read {
 				status = http.StatusBadRequest
@@ -87,10 +89,14 @@ func New(opts *Opts) *Server {
 	})
 
 	if opts.OnError == nil {
-		opts.OnError = func(conn net.Conn, err error) {}
+		opts.OnError = func(conn net.Conn, err error) {
+			fmt.Printf("ip:%s,OnError: %s\n", conn.RemoteAddr().String(),err.Error())
+		}
 	}
 	if opts.OnAcceptError == nil {
-		opts.OnAcceptError = func(err error) (fatalErr error) { return err }
+		opts.OnAcceptError = func(err error) (fatalErr error) {
+			fmt.Printf("OnAcceptError: %s\n", err.Error())
+			return err }
 	}
 	return &Server{
 		proxy:         p,
